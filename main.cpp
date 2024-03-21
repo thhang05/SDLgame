@@ -3,7 +3,8 @@
 
 #include <iostream>
 
-#include "BackGround.h"
+#include "background.h"
+using namespace std;
 bool init(){
       if (SDL_Init(SDL_INIT_VIDEO) < 0) { 
         cerr << "Lỗi khởi tạo SDL: " << SDL_GetError() << endl;
@@ -15,15 +16,16 @@ bool init(){
         return 1; 
     }
 }
-using namespace std ;
-int main(int argc, char* argv[]) {
-    
-    SDL_Window* window = SDL_CreateWindow( "The adventure of elemental", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600,360,SDL_WINDOW_SHOWN);
 
-    if (!window) {
+
+int main(int argc, char* argv[]) {
+    init();
+     SDL_Window* window = SDL_CreateWindow( "The adventure of elemental", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600,360,SDL_WINDOW_SHOWN);
+
+     if (!window) {
         cerr << "Lỗi tạo cửa sổ: " << SDL_GetError() << endl;
         return 1; 
-    }
+     }
 
     SDL_Renderer* renderer = SDL_CreateRenderer( window,-1, SDL_RENDERER_ACCELERATED);
 
@@ -50,6 +52,7 @@ int main(int argc, char* argv[]) {
                            x=e.button.x;
                            y=e.button.y;
                            if(x>200&&x<400&&y>220&&y<270){
+                               SDL_RenderClear(render);
                                background.draw(renderer);
                                SDL_RenderPresent(renderer);
                            }
@@ -58,12 +61,13 @@ int main(int argc, char* argv[]) {
                 }
                 }
     
-   
+    
 
     SDL_DestroyRenderer(renderer); 
     SDL_DestroyWindow(window);
     IMG_Quit();
     SDL_Quit();
-
+    
     return 0; 
 }
+

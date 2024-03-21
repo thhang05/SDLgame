@@ -87,6 +87,7 @@ int main(int argc, char* argv[]) {
                            x=e.button.x;
                            y=e.button.y;
                            if(x>200&&x<400&&y>220&&y<270){
+                               SDL_RenderClear(renderer);
                                background.draw(renderer);
                                SDL_RenderPresent(renderer);
                            }
