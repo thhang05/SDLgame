@@ -5,21 +5,17 @@
 
 #include "background.h"
 using namespace std;
-bool init(){
-      if (SDL_Init(SDL_INIT_VIDEO) < 0) { 
+
+int main(int argc, char* argv[]) {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) { 
         cerr << "Lỗi khởi tạo SDL: " << SDL_GetError() << endl;
         return 1; 
     }
 
     if (!(IMG_Init(IMG_INIT_PNG))) {
         cerr << "Lỗi khởi tạo SDL_Image: " << SDL_GetError() << endl;
-        return 1; 
+         return 1;
     }
-}
-
-
-int main(int argc, char* argv[]) {
-    init();
      SDL_Window* window = SDL_CreateWindow( "The adventure of elemental", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600,360,SDL_WINDOW_SHOWN);
 
      if (!window) {
@@ -52,7 +48,7 @@ int main(int argc, char* argv[]) {
                            x=e.button.x;
                            y=e.button.y;
                            if(x>200&&x<400&&y>220&&y<270){
-                               SDL_RenderClear(render);
+                               SDL_RenderClear(renderer);
                                background.draw(renderer);
                                SDL_RenderPresent(renderer);
                            }

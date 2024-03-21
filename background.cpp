@@ -21,7 +21,7 @@ void Background::draw(SDL_Renderer* renderer) {
 }
 void Background :: drawStartbutton (SDL_Renderer* renderer){
     const char* startpath="startbutton.png";
-    SDL_Texture* startTexture= IMG_LoadTexture(render,startpath);
+    SDL_Texture* startTexture= IMG_LoadTexture(renderer,startpath);
      if (!startTexture ) {
         std::cerr << "Lỗi tải kết cấu: " << SDL_GetError() << std::endl;
     }
