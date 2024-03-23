@@ -4,7 +4,14 @@
 #include <iostream>
 
 #include "background.h"
+#include "player.h"
 using namespace std;
+void output(SDL_Renderer* renderer,Background &background,Player &player){
+    SDL_RenderClear(renderer);
+    background.draw(renderer);
+    player.draw(renderer);
+    SDL_RenderPresent(renderer);
+}
 
 int main(int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) { 
@@ -56,6 +63,17 @@ int main(int argc, char* argv[]) {
                     }
                 }
                 }
+    Player player(renderer);
+
+     while (!quit||! player.playing){
+         if (e.type==SDL_QUIT) quit=true;
+         else {
+            player.changeFrame();
+            output(renderer,background,player);
+            player.resetPosition();
+         }
+            }
+        
     
     
 

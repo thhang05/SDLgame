@@ -1,11 +1,11 @@
 #include "player.h"
  
-Player:: Player(SDL_Renderer* renderer) : player(),playerX(0),playerY(260),playerWidth(0),playerHeight(0),playing(true)
+Player:: Player(SDL_Renderer* renderer) : player(),playerX(0),playerY(260),playerWidth(0),playerHeight(0),playing(true),frame(0)
 {
-    const char* playerTexture ="player1-run.png";
-    playerTexture=IMG_LoadTexture(renderer,playerTexture);
+    const char* playerPath ="player1-run.png";
+    playerTexture=IMG_LoadTexture(renderer,playerPath);
     SDL_Rect ret;
-    SDL_QuerryTexture(playerTexture,NULL,NULL,&ret.w,&ret.h);
+    SDL_QueryTexture(playerTexture,NULL,NULL,&ret.w,&ret.h);
     playerWidth=ret.w/6;
     playerHeight=ret.h;
 }
@@ -17,6 +17,14 @@ void Player:: draw(SDL_Renderer* renderer){
         playerRect[i].w=playerWidth;
         playerRect[i].h=playerHeight;
     }
-    
+    SDL_RenderCopy(renderer,playerTexture,NULL,&playerRect[frame]);
 }
+void Player:: changeFrames(){
+    frame%6 +1;
+ 
+}
+void Player:: resetPosition(){
+    if(playerX>=600) playerX=0;
+}
+
     
