@@ -43,6 +43,7 @@ int main(int argc, char* argv[]) {
     SDL_RenderPresent(renderer);
     bool quit=false;
     SDL_Event e;
+     Player player(renderer);
     int x,y;
     while(!quit){
          while( SDL_PollEvent( &e ) != 0 )
@@ -55,27 +56,30 @@ int main(int argc, char* argv[]) {
                            x=e.button.x;
                            y=e.button.y;
                            if(x>200&&x<400&&y>220&&y<270){
-                               SDL_RenderClear(renderer);
-                               background.draw(renderer);
-                               SDL_RenderPresent(renderer);
+                               output(renderer,background,player);
                            }
+
                            break;
                     }
                 }
                 }
-    Player player(renderer);
+   
+   // player.changeFrames();
+    
+    //player.resetPosition();
+   /* int count=0;
+    SDL_Event event;
+    while(!quit||count<18){
+         while( SDL_PollEvent( &e ) != 0 )
+                {
+                    player.changeFrames();
+                    output(renderer,background,player);
+                    player.resetPosition();
+                    count++;
+                }
+    }
+    */
 
-     while (!quit||! player.playing){
-         if (e.type==SDL_QUIT) quit=true;
-         else {
-            player.changeFrame();
-            output(renderer,background,player);
-            player.resetPosition();
-         }
-            }
-        
-    
-    
 
     SDL_DestroyRenderer(renderer); 
     SDL_DestroyWindow(window);
