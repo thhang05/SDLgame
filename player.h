@@ -11,7 +11,7 @@ class Player {
 
 
 
-      private:
+      
        SDL_Texture* playerTexture;
       
        float playerX,playerY,playerWidth,playerHeight;

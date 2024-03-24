@@ -11,17 +11,18 @@ Player:: Player(SDL_Renderer* renderer) : playerX(0),playerY(260),playerWidth(0)
 }
 void Player:: draw(SDL_Renderer* renderer){
     SDL_Rect playerRect[6];
-    SDL_Rect des ={0,130,530,150};
+    SDL_Rect des ={0,180,100,100};
     for(int i=0;i<6;i++){
         playerRect[i].x=i*playerWidth;
-        playerRect[i].y=130;
+        playerRect[i].y=0;
         playerRect[i].w=playerWidth;
         playerRect[i].h=playerHeight;
     }
     SDL_RenderCopy(renderer,playerTexture,&playerRect[frame],&des);
 }
 void Player:: changeFrames(){
-    frame%6 +1;
+    frame++;
+    if(frame>=6) frame=0;
  
 }
 void Player:: resetPosition(){

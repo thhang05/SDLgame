@@ -6,11 +6,18 @@
 #include "background.h"
 #include "player.h"
 using namespace std;
+
 void output(SDL_Renderer* renderer,Background &background,Player &player){
     SDL_RenderClear(renderer);
     background.draw(renderer);
     player.draw(renderer);
     SDL_RenderPresent(renderer);
+}
+void GameStart (SDL_Renderer* renderer,Background &background,Player &player){
+    while(player.playing){
+        output(renderer,background,player);
+        player.changeFrames();
+    }
 }
 
 int main(int argc, char* argv[]) {
@@ -37,13 +44,13 @@ int main(int argc, char* argv[]) {
         return 1; 
     }
 
-    Background background(renderer);
+    Background background(renderer);  
     background.draw(renderer);
     background.drawStartbutton(renderer);
     SDL_RenderPresent(renderer);
     bool quit=false;
     SDL_Event e;
-     Player player(renderer);
+    Player player(renderer);
     int x,y;
     while(!quit){
          while( SDL_PollEvent( &e ) != 0 )
@@ -56,29 +63,16 @@ int main(int argc, char* argv[]) {
                            x=e.button.x;
                            y=e.button.y;
                            if(x>200&&x<400&&y>220&&y<270){
-                               output(renderer,background,player);
+                               GameStart(renderer,background,player);
                            }
 
                            break;
                     }
                 }
                 }
+
    
-   // player.changeFrames();
     
-    //player.resetPosition();
-   /* int count=0;
-    SDL_Event event;
-    while(!quit||count<18){
-         while( SDL_PollEvent( &e ) != 0 )
-                {
-                    player.changeFrames();
-                    output(renderer,background,player);
-                    player.resetPosition();
-                    count++;
-                }
-    }
-    */
 
 
     SDL_DestroyRenderer(renderer); 
@@ -88,4 +82,5 @@ int main(int argc, char* argv[]) {
     
     return 0; 
 }
+
 
