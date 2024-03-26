@@ -65,6 +65,7 @@ int main(int argc, char* argv[]) {
                            if(x>200&&x<400&&y>220&&y<270){
                                GameStart(renderer,background,player);
                            }
+                           
 
                            break;
                     }

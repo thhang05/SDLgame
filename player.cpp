@@ -1,6 +1,6 @@
 #include "player.h"
  
-Player:: Player(SDL_Renderer* renderer) : playerX(0),playerY(260),playerWidth(0),playerHeight(0),playing(true),frame(0)
+Player:: Player(SDL_Renderer* renderer) : playerX(0),playerY(180),playerWidth(0),playerHeight(0),playing(true),frame(0),elaspe(0)
 {
     const char* playerPath ="player1-run.png";
     playerTexture=IMG_LoadTexture(renderer,playerPath);
@@ -11,7 +11,7 @@ Player:: Player(SDL_Renderer* renderer) : playerX(0),playerY(260),playerWidth(0)
 }
 void Player:: draw(SDL_Renderer* renderer){
     SDL_Rect playerRect[6];
-    SDL_Rect des ={0,180,100,100};
+    SDL_Rect des ={playerX,playerY,100,100};
     for(int i=0;i<6;i++){
         playerRect[i].x=i*playerWidth;
         playerRect[i].y=0;
@@ -21,12 +21,12 @@ void Player:: draw(SDL_Renderer* renderer){
     SDL_RenderCopy(renderer,playerTexture,&playerRect[frame],&des);
 }
 void Player:: changeFrames(){
-    frame++;
-    if(frame>=6) frame=0;
+    elaspe ++;
+    if(elaspe%1000==0){
+        frame=(frame+1)%6;
+    } 
+    
  
-}
-void Player:: resetPosition(){
-    if(playerX>=600) playerX=0;
 }
 
     

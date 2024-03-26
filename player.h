@@ -6,8 +6,7 @@ class Player {
       Player(SDL_Renderer* renderer);
       void draw (SDL_Renderer* renderer);
       void changeFrames ();
-      void resetPosition();
-
+      
 
 
 
@@ -17,6 +16,7 @@ class Player {
        float playerX,playerY,playerWidth,playerHeight;
        int frame;
        bool playing;
+       int elaspe;
        
 
 };
