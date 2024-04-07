@@ -5,18 +5,22 @@
 
 #include "background.h"
 #include "player.h"
+#include "predator.h"
 using namespace std;
 
-void output(SDL_Renderer* renderer,Background &background,Player &player){
+void output(SDL_Renderer* renderer,Background &background,Player &player,Predator &predator){
     SDL_RenderClear(renderer);
     background.draw(renderer);
     player.draw(renderer);
+    predator.draw(renderer);
     SDL_RenderPresent(renderer);
 }
-void GameStart (SDL_Renderer* renderer,Background &background,Player &player){
+void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator){
     while(player.playing){
-        output(renderer,background,player);
+        output(renderer,background,player,predator);
         player.changeFrames();
+        predator.update();
+    
     }
 }
 
@@ -51,6 +55,7 @@ int main(int argc, char* argv[]) {
     bool quit=false;
     SDL_Event e;
     Player player(renderer);
+    Predator predator(renderer);
     int x,y;
     while(!quit){
          while( SDL_PollEvent( &e ) != 0 )
@@ -63,7 +68,7 @@ int main(int argc, char* argv[]) {
                            x=e.button.x;
                            y=e.button.y;
                            if(x>200&&x<400&&y>220&&y<270){
-                               GameStart(renderer,background,player);
+                               GameStart(renderer,background,player,predator);
                            }
                            
 

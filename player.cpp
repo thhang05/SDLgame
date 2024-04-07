@@ -1,6 +1,6 @@
 #include "player.h"
  
-Player:: Player(SDL_Renderer* renderer) : playerX(0),playerY(180),playerWidth(0),playerHeight(0),playing(true),frame(0),elaspe(0)
+Player:: Player(SDL_Renderer* renderer) : playerX(120),playerY(180),playerWidth(0),playerHeight(0),playing(true),frame(0),elapse(0)
 {
     const char* playerPath ="player1-run.png";
     playerTexture=IMG_LoadTexture(renderer,playerPath);
@@ -21,8 +21,8 @@ void Player:: draw(SDL_Renderer* renderer){
     SDL_RenderCopy(renderer,playerTexture,&playerRect[frame],&des);
 }
 void Player:: changeFrames(){
-    elaspe ++;
-    if(elaspe%1000==0){
+    elapse ++;
+    if(elapse%1000==0){
         frame=(frame+1)%6;
     } 
     

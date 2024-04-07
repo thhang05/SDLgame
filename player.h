@@ -7,16 +7,12 @@ class Player {
       void draw (SDL_Renderer* renderer);
       void changeFrames ();
       
-
-
-
-      
        SDL_Texture* playerTexture;
       
-       float playerX,playerY,playerWidth,playerHeight;
+       int playerX,playerY,playerWidth,playerHeight;
        int frame;
        bool playing;
-       int elaspe;
+       int elapse;
        
 
 };
