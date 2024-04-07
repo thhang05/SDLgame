@@ -14,7 +14,6 @@ class Predator {
      int getMonsterY();
      int getFireX();
      int getFireY();
-    private :
      SDL_Texture* monsterTexture ;
      SDL_Texture* fireTexture ;
      int MonsterX;

@@ -12,8 +12,8 @@ Background::Background(SDL_Renderer* renderer) : skyTexture(nullptr), groundText
 }
 
 void Background::draw(SDL_Renderer* renderer) {
-    SDL_Rect skyRect = {0, 0, 600, 260};
-    SDL_Rect groundRect = {0, 260,600, 100};
+    SDL_Rect skyRect = {0, 0, 1280, 620};
+    SDL_Rect groundRect = {0, 560,1280, 300};
     
 
     SDL_RenderCopy(renderer, skyTexture, NULL, &skyRect);
@@ -25,6 +25,6 @@ void Background :: drawStartbutton (SDL_Renderer* renderer){
      if (!startTexture ) {
         std::cerr << "Lỗi tải kết cấu: " << SDL_GetError() << std::endl;
     }
-    SDL_Rect startRect={200,220,200,50};
+    SDL_Rect startRect={540,335,200,50};
     SDL_RenderCopy(renderer,startTexture,NULL,&startRect);
 }

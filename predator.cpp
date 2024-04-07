@@ -1,7 +1,7 @@
 #include "predator.h"
 #include <cstdlib>
 #include<ctime>
-Predator :: Predator(SDL_Renderer* renderer):monsterTexture(nullptr) ,fireTexture(nullptr),MonsterX(0),MonsterY(120),FireX(0),FireY(180),frame(0),monsterSpeed(3),firespeed(2),
+Predator :: Predator(SDL_Renderer* renderer):monsterTexture(nullptr) ,fireTexture(nullptr),MonsterX(0),MonsterY(300),FireX(0),FireY(450),frame(0),monsterSpeed(1),firespeed(2),
                                              monsterWidth(83),monsterHeight(83),fireWidth(50),fireHeight(50),speedchanger(0),elapse(0)
 {
    srand(time(NULL));
@@ -33,31 +33,27 @@ void Predator:: draw(SDL_Renderer* renderer){
 void Predator:: move(){
     MonsterX-=monsterSpeed;
     FireX-=firespeed;
-    speedchanger++;
-    if(speedchanger%1000==0&&monsterSpeed<20&&firespeed<20){
-        monsterSpeed++;
-        firespeed++;
-    }
-    if(monsterSpeed>=20||firespeed>=20){
-        monsterSpeed=30;
-        firespeed=30;
-    }
+    
 }
 void Predator:: resetPostion(){
     if(MonsterX<=-40) {
          srand(time(NULL));
-         MonsterX = rand()%150+400;
+         MonsterX = rand()%280+1000;
     }
     if(FireX<=-40){
         srand(time(NULL));
-        FireX=rand()%120+350;
+        FireX=rand()%280+1000;
     }
 }
 void Predator:: changeFrame(){
     elapse++;
-    if(elapse%100000000==0){
-        frame=(frame+1)%6;
+    if(elapse==1000){
+        frame=(frame+1);
+        if(frame>5)
+            frame=0;
     }
+    else if(elapse>1000)
+        elapse=0;
 
 }
 void Predator:: update(){

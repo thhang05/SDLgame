@@ -7,23 +7,14 @@
 #include "player.h"
 #include "predator.h"
 using namespace std;
-
-void output(SDL_Renderer* renderer,Background &background,Player &player,Predator &predator){
-    SDL_RenderClear(renderer);
-    background.draw(renderer);
-    player.draw(renderer);
-    predator.draw(renderer);
-    SDL_RenderPresent(renderer);
-}
-void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator){
-    while(player.playing){
-        output(renderer,background,player,predator);
-        player.changeFrames();
-        predator.update();
-    
-    }
-}
-
+bool quit=false;
+SDL_Event e;
+SDL_Window* window=NULL;
+SDL_Renderer* renderer=NULL;
+const Uint8* keys;
+void output(SDL_Renderer* renderer,Background &background,Player &player,Predator &predator);
+void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator);
+bool checkCollision(Player player,Predator predator);
 int main(int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) { 
         cerr << "Lỗi khởi tạo SDL: " << SDL_GetError() << endl;
@@ -34,14 +25,14 @@ int main(int argc, char* argv[]) {
         cerr << "Lỗi khởi tạo SDL_Image: " << SDL_GetError() << endl;
          return 1;
     }
-     SDL_Window* window = SDL_CreateWindow( "The adventure of elemental", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 600,360,SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow( "The adventure of elemental", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280,720,SDL_WINDOW_SHOWN);
 
      if (!window) {
         cerr << "Lỗi tạo cửa sổ: " << SDL_GetError() << endl;
         return 1; 
      }
 
-    SDL_Renderer* renderer = SDL_CreateRenderer( window,-1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer( window,-1, SDL_RENDERER_ACCELERATED);
 
     if (!renderer) {
         cerr << "Lỗi tạo trình kết xuất: " << SDL_GetError() << endl;
@@ -52,12 +43,11 @@ int main(int argc, char* argv[]) {
     background.draw(renderer);
     background.drawStartbutton(renderer);
     SDL_RenderPresent(renderer);
-    bool quit=false;
-    SDL_Event e;
     Player player(renderer);
     Predator predator(renderer);
     int x,y;
     while(!quit){
+        Uint32 windowID = SDL_GetWindowID(window);
          while( SDL_PollEvent( &e ) != 0 )
                 {
                     switch(e.type){
@@ -67,20 +57,13 @@ int main(int argc, char* argv[]) {
                         case SDL_MOUSEBUTTONDOWN :
                            x=e.button.x;
                            y=e.button.y;
-                           if(x>200&&x<400&&y>220&&y<270){
+                           if(x>540&&x<740&&y>335&&y<380){
                                GameStart(renderer,background,player,predator);
                            }
-                           
-
                            break;
                     }
                 }
                 }
-
-   
-    
-
-
     SDL_DestroyRenderer(renderer); 
     SDL_DestroyWindow(window);
     IMG_Quit();
@@ -88,5 +71,39 @@ int main(int argc, char* argv[]) {
     
     return 0; 
 }
+void output(SDL_Renderer* renderer,Background &background,Player &player,Predator &predator){
+    SDL_RenderClear(renderer);
+    background.draw(renderer);
+    player.draw(renderer);
+    predator.draw(renderer);
+    SDL_RenderPresent(renderer);
+}
+void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator){
+    while(player.playing&&!quit){
+        output(renderer,background,player,predator);
+        player.changeFrames();
+        player.playerY=480;
+        //std::cout<<predator.MonsterX<<" ";
+        predator.update();
+         while( SDL_PollEvent( &e ) != 0 )
+                {
+                    switch(e.type){
+                        case SDL_QUIT :
+                           quit=true;
+                           break;
+                    }
+                }
+        
+        keys = SDL_GetKeyboardState(NULL);
+	if (keys[SDL_SCANCODE_SPACE])
+		player.playerY-=100;
+    }
+    if(checkCollision(player,predator))
+        player.playing=false;
+}
+bool checkCollision(Player player,Predator predator){
+        return (player.playerX==predator.MonsterX||player.playerX==predator.FireX);
+}
+
 
 
