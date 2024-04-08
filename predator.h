@@ -21,8 +21,8 @@ class Predator {
      int FireX;
      int FireY;
      int frame;
-     int monsterSpeed;
-     int firespeed;
+     float monsterSpeed;
+     float firespeed;
      int monsterWidth;
      int monsterHeight;
      int fireWidth ;

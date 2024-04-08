@@ -1,7 +1,7 @@
 #include "predator.h"
 #include <cstdlib>
 #include<ctime>
-Predator :: Predator(SDL_Renderer* renderer):monsterTexture(nullptr) ,fireTexture(nullptr),MonsterX(0),MonsterY(300),FireX(0),FireY(450),frame(0),monsterSpeed(1),firespeed(2),
+Predator :: Predator(SDL_Renderer* renderer):monsterTexture(nullptr) ,fireTexture(nullptr),MonsterX(0),MonsterY(300),FireX(0),FireY(450),frame(0),monsterSpeed(0.5),firespeed(0.5),
                                              monsterWidth(83),monsterHeight(83),fireWidth(50),fireHeight(50),speedchanger(0),elapse(0)
 {
    srand(time(NULL));
