@@ -47,12 +47,12 @@ void Predator:: resetPostion(){
 }
 void Predator:: changeFrame(){
     elapse++;
-    if(elapse==1000){
+    if(elapse==100){
         frame=(frame+1);
         if(frame>5)
             frame=0;
     }
-    else if(elapse>1000)
+    else if(elapse>100)
         elapse=0;
 
 }
