@@ -9,7 +9,7 @@ class Player {
       
        SDL_Texture* playerTexture;
       
-       int playerX,playerY,playerWidth,playerHeight;
+       int X,Y,Width,Height;
        int frame;
        bool playing;
        int elapse;

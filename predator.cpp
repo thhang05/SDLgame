@@ -1,7 +1,7 @@
 #include "predator.h"
 #include <cstdlib>
 #include<ctime>
-Predator :: Predator(SDL_Renderer* renderer):monsterTexture(nullptr) ,fireTexture(nullptr),MonsterX(0),MonsterY(300),FireX(0),FireY(450),frame(0),monsterSpeed(0.5),firespeed(0.5),
+Predator :: Predator(SDL_Renderer* renderer):monsterTexture(nullptr) ,fireTexture(nullptr),MonsterX(0),MonsterY(300),FireX(0),FireY(450),frame(0),monsterSpeed(1),firespeed(2),
                                              monsterWidth(83),monsterHeight(83),fireWidth(50),fireHeight(50),speedchanger(0),elapse(0)
 {
    srand(time(NULL));
@@ -36,11 +36,11 @@ void Predator:: move(){
     
 }
 void Predator:: resetPostion(){
-    if(MonsterX<=-40) {
+    if(MonsterX<=1) {
          srand(time(NULL));
          MonsterX = rand()%280+1000;
     }
-    if(FireX<=-40){
+    if(FireX<=1){
         srand(time(NULL));
         FireX=rand()%280+1000;
     }
