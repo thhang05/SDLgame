@@ -13,6 +13,6 @@ class Player {
        int frame;
        bool playing;
        int elapse;
-       
+       SDL_Rect playerRect[15];
 
 };

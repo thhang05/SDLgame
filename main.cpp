@@ -11,8 +11,8 @@ const int PLAYERWIDTH =100 ;
 const int PLAYERHEIGHT =100;
 const int MONSTERWIDTH =80;
 const int MONSTERHEIGHT =80;
-const int FIREWIDTH = 150;
-const int FIREHEIGHT =150;
+const int FIREWIDTH = 80;
+const int FIREHEIGHT =80;
 bool quit=false;
 SDL_Event e;
 SDL_Window* window=NULL;
@@ -87,9 +87,14 @@ void output(SDL_Renderer* renderer,Background &background,Player &player,Predato
 void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator){
     while(checkCollision(player,predator)&&!quit){
         Sleep(2);
+        player.Y=480;
+        keys = SDL_GetKeyboardState(NULL);
+	    if (keys[SDL_SCANCODE_SPACE]){
+		    player.Y-=100;
+        }
         output(renderer,background,player,predator);
         player.changeFrames();
-        player.Y=480;
+        
         //std::cout<<predator.MonsterX<<" ";
         predator.update();
          while( SDL_PollEvent( &e ) != 0 )
@@ -101,9 +106,7 @@ void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Pre
                     }
                 }
         
-        keys = SDL_GetKeyboardState(NULL);
-	if (keys[SDL_SCANCODE_SPACE])
-		player.Y-=100;
+       
    
     }
     
@@ -120,7 +123,7 @@ bool checkCollision (Player &player,Predator &predator){
 
     if (
         player.X <= predator.FireX +FIREWIDTH &&
-        player.X + PLAYERWIDTH >= predator.FireX &&
+        player.X + PLAYERWIDTH/2+10 >= predator.FireX &&
         player.Y + PLAYERHEIGHT >= predator.FireY &&
         player.Y <= predator.FireY + FIREHEIGHT
     ){
