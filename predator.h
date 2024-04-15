@@ -8,7 +8,7 @@ class Predator {
      void draw(SDL_Renderer* renderer);
      void move();
      void changeFrame();
-     void resetPostion();
+     void resetPosition();
      void update();
      int getMonsterX();
      int getMonsterY();

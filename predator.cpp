@@ -1,14 +1,21 @@
 #include "predator.h"
 #include <cstdlib>
 #include<ctime>
+#include<random>
 Predator :: Predator(SDL_Renderer* renderer):monsterTexture(nullptr) ,fireTexture(nullptr),MonsterX(0),MonsterY(100),FireX(0),FireY(500),frame(0),monsterSpeed(1),firespeed(2),
                                              monsterWidth(83),monsterHeight(83),fireWidth(50),fireHeight(50),speedchanger(0),elapse(0)
 {
-   srand(time(NULL));
-   MonsterX = rand()%150+300;
-   FireX=rand()%120+850;
-    
-   
+   //srand(time(NULL));
+   //MonsterX = rand()%150+300;
+   //FireX=rand()%120+850;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> mons_dis(300,450);
+    std::uniform_int_distribution<> fire_dis(850,970);
+    std::uniform_int_distribution<> mons_hei (200,350);
+    MonsterX=mons_dis(gen);
+    FireX=fire_dis(gen)  ; 
+    MonsterY=mons_hei(gen);
     const char* monsterPath ="predator.png";
     const char* firePath ="fire.png";
     monsterTexture=IMG_LoadTexture(renderer,monsterPath);
@@ -26,11 +33,11 @@ void Predator:: draw(SDL_Renderer* renderer){
         monsterRect[i].w=83;
         monsterRect[i].h=83;
     }
-    SDL_SetRenderDrawColor(renderer,255,0,0,255);
-	SDL_RenderDrawRect(renderer,&desMon);
+    //SDL_SetRenderDrawColor(renderer,255,0,0,255);
+	//SDL_RenderDrawRect(renderer,&desMon);
     SDL_RenderCopy(renderer,monsterTexture,&monsterRect[frame],&desMon);
-    SDL_Rect desFire ={FireX,FireY,80,80};
-    SDL_RenderDrawRect(renderer,&desFire);
+    SDL_Rect desFire ={FireX,FireY,60,60};
+    //SDL_RenderDrawRect(renderer,&desFire);
     SDL_RenderCopy(renderer,fireTexture,NULL,&desFire);
 }
 void Predator:: move(){
@@ -38,14 +45,20 @@ void Predator:: move(){
     FireX-=firespeed;
     
 }
-void Predator:: resetPostion(){
+void Predator:: resetPosition(){
     if(MonsterX<=1) {
-         srand(time(NULL));
-         MonsterX = rand()%280+1000;
+         std::random_device rd;
+         std::mt19937 gen(rd());
+         std::uniform_int_distribution<> mons_dis(300,450);
+         std::uniform_int_distribution<> mons_heig(200,350);
+         MonsterX=mons_dis(gen);
+         MonsterY=mons_heig(gen);
     }
     if(FireX<=1){
-        srand(time(NULL));
-        FireX=rand()%280+1000;
+       std::random_device rd;
+       std::mt19937 gen(rd());
+       std::uniform_int_distribution<> fire_dis(850,970);
+       FireX=fire_dis(gen);
     }
 }
 void Predator:: changeFrame(){
@@ -62,7 +75,7 @@ void Predator:: changeFrame(){
 void Predator:: update(){
     changeFrame();
     move();
-    resetPostion();
+    resetPosition();
 }
 int Predator:: getMonsterX(){
     return MonsterX;

@@ -28,3 +28,14 @@ void Background :: drawStartbutton (SDL_Renderer* renderer){
     SDL_Rect startRect={540,335,200,50};
     SDL_RenderCopy(renderer,startTexture,NULL,&startRect);
 }
+void Background:: drawNewGameButton(SDL_Renderer* renderer){
+     const char* newPath ="newgame.png";
+     SDL_Texture* newgameTexture ;
+     newgameTexture = IMG_LoadTexture(renderer,newPath);
+    if(!newgameTexture){
+        std:: cerr << "Lỗi tải kết cấu: " << SDL_GetError() <<std::endl;
+    }
+    SDL_Rect desnew ={540,350,180,100};
+    SDL_RenderCopy(renderer,newgameTexture,NULL,&desnew);
+    SDL_RenderPresent(renderer);
+}

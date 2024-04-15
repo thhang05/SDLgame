@@ -18,8 +18,8 @@ Player:: Player(SDL_Renderer* renderer) : X(120),Y(480),Width(0),Height(0),playi
 void Player:: draw(SDL_Renderer* renderer){
    
     SDL_Rect des ={X,Y,100,100};
-    SDL_SetRenderDrawColor(renderer,255,0,0,255);
-	SDL_RenderDrawRect(renderer,&des);
+    //SDL_SetRenderDrawColor(renderer,255,0,0,255);
+	//SDL_RenderDrawRect(renderer,&des);
     SDL_RenderCopy(renderer,playerTexture,&playerRect[frame],&des);
 }
 void Player:: changeFrames(){

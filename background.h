@@ -7,8 +7,9 @@ public:
     Background(SDL_Renderer* renderer); 
     void draw(SDL_Renderer* renderer);
     void drawStartbutton(SDL_Renderer* renderer);
-
+    void drawNewGameButton(SDL_Renderer* renderer);
 private:
     SDL_Texture* skyTexture;
     SDL_Texture* groundTexture;
+    SDL_Texture* newgameTexture;
 };
