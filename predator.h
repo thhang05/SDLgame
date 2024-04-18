@@ -2,13 +2,14 @@
 #include<iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+
 class Predator {
     public :
      Predator(SDL_Renderer* renderer);
      void draw(SDL_Renderer* renderer);
      void move();
      void changeFrame();
-     void resetPosition();
+     void resetPosition(bool reset=false);
      void update();
      int getMonsterX();
      int getMonsterY();
