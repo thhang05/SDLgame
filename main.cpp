@@ -14,10 +14,13 @@ const int MONSTERHEIGHT =80;
 const int FIREWIDTH = 60;
 const int FIREHEIGHT =60;
 int mTicksCount = 0;
+bool restart = false ;
 bool quit=false;
 SDL_Event e;
 SDL_Window* window=NULL;
 SDL_Renderer* renderer=NULL;
+SDL_Texture* newgameTexture ;
+SDL_Rect restartdes ={540,350,180,100};
 const Uint8* keys;
 void output(SDL_Renderer* renderer,Background &background,Player &player,Predator &predator);
 void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator);
@@ -50,7 +53,12 @@ int main(int argc, char* argv[]) {
         cerr << "Lỗi tạo trình kết xuất: " << SDL_GetError() << endl;
         return 1; 
     }
-
+    const char* newPath ="newgame.png";
+   
+    newgameTexture = IMG_LoadTexture(renderer,newPath);
+    if(!newgameTexture){
+        cerr << "Lỗi tải kết cấu: " << SDL_GetError() <<endl;
+    }
     Background background(renderer);  
     background.draw(renderer);
     background.drawStartbutton(renderer);
@@ -69,22 +77,10 @@ int main(int argc, char* argv[]) {
                         case SDL_MOUSEBUTTONDOWN :
                            x=e.button.x;
                            y=e.button.y;
-                           /*if(x>540&&x<740&&y>335&&y<380){
-                               GameStart(renderer,background,player,predator);
-                           } 
-                           if(!checkCollision(player,predator)){
-                                 background.drawNewGameButton(renderer);
-                                 if(x>540&&x<720&&y>350&&y<450){
-                                    resetGame(player,predator);
-                                    GameStart(renderer,background,player,predator);
-                                 }
-                            }
-                            break;
-                             */ 
-                           
-                               if(x>540&&x<740&&y>335&&y<380){
-                               GameStart(renderer,background,player,predator);
-                               update();
+                        if(x>540&&x<740&&y>335&&y<380){
+                                  if(restart) restart=false;
+                                  GameStart(renderer,background,player,predator);
+                                  //update();
                                }
                            
                            
@@ -106,20 +102,27 @@ void output(SDL_Renderer* renderer,Background &background,Player &player,Predato
     background.draw(renderer);
     player.draw(renderer);
     predator.draw(renderer);
+    if(restart)
+    SDL_RenderCopy(renderer,newgameTexture,NULL,&restartdes);
     SDL_RenderPresent(renderer);
 }
 void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator){
-    while(checkCollision(player,predator)&&!quit){
+    resetGame(player,predator);
+    while(!restart&&!quit){
         Sleep(2);
         player.Y=480;
         keys = SDL_GetKeyboardState(NULL);
 	    if (keys[SDL_SCANCODE_SPACE]){
 		    player.Y-=100;
         }
+         if(!checkCollision(player,predator)){
+          restart=true;
+
+        }
         output(renderer,background,player,predator);
         player.changeFrames();
         
-        //std::cout<<predator.MonsterX<<" ";
+       
         predator.update();
          while( SDL_PollEvent( &e ) != 0 )
                 {
@@ -133,38 +136,7 @@ void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Pre
        
    
     }
-   if(!checkCollision(player,predator)){
-        const char* newPath ="newgame.png";
-        SDL_Texture* newgameTexture ;
-        newgameTexture = IMG_LoadTexture(renderer,newPath);
-        if(!newgameTexture){
-            cerr << "Lỗi tải kết cấu: " << SDL_GetError() <<endl;
-        }
-        SDL_Rect desnew ={540,350,180,100};
-        SDL_RenderCopy(renderer,newgameTexture,NULL,&desnew);
-        SDL_RenderPresent(renderer);
-        int x,y;
-        while(!quit){
-        while( SDL_PollEvent( &e ) != 0 )
-                {
-                    switch(e.type){
-                        case SDL_QUIT :
-                           quit=true;
-                           break;
-                        case SDL_MOUSEBUTTONDOWN:
-                           x=e.button.x;
-                           y=e.button.y;
-                            if(x>540&&x<720&&y>350&&y<450){
-                                resetGame(player,predator);
-                                checkCollision(player,predator);
-                                GameStart(renderer,background,player,predator);
-                            }
-                            break;
-                    }
-                }
-        }
-    
-    }
+
     
     
     
@@ -192,6 +164,7 @@ bool checkCollision (Player &player,Predator &predator){
    
 }
 void resetGame (Player &player,Predator &predator){
+    restart=false;
     player.Y=480 ;
     predator.resetPosition();
     player.playing=true ;
