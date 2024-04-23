@@ -15,7 +15,7 @@ Background::Background(SDL_Renderer* renderer) : skyTexture(nullptr), groundText
         for(int i = 0 ; i < 60; i++)
             SkyRect[i] = {10*i,0,600,260};
     }
-    const char* bloodPath ="blood.png";
+    const char* bloodPath ="myheart.png";
     bloodTexture = IMG_LoadTexture(renderer,bloodPath);
     if(!bloodTexture){
         std::cerr<<"Lỗi tải kết cấu: " << SDL_GetError() << std::endl;
