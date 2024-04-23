@@ -2,15 +2,15 @@
 #include<iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-
+#include "player.h"
 class Predator {
     public :
      Predator(SDL_Renderer* renderer);
      void draw(SDL_Renderer* renderer);
      void move();
      void changeFrame();
-     void resetPosition();
-     void update();
+     void resetPosition(Player &player);
+     void update(Player &player);
      int getMonsterX();
      int getMonsterY();
      int getFireX();

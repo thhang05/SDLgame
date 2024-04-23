@@ -78,7 +78,9 @@ int main(int argc, char* argv[]) {
                            x=e.button.x;
                            y=e.button.y;
                                if(x>540&&x<740&&y>335&&y<380){
-                               GameStart(renderer,background,player,predator);
+                                 background.heart=3;
+                                 GameStart(renderer,background,player,predator);
+                                 update();
                                }
                            
                            
@@ -105,13 +107,13 @@ void output(SDL_Renderer* renderer,Background &background,Player &player,Predato
         
         {
             background.drawNewGameButton(renderer);
-            background.heart=3;
-        }
+        }    
         
     SDL_RenderPresent(renderer);
 }
 void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator){
-     resetGame(player,predator,background);
+    
+    resetGame(player,predator,background);
     while(!quit&&background.heart!=0){
         Sleep(2);
         background.update(renderer);
@@ -119,18 +121,18 @@ void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Pre
 	    if (keys[SDL_SCANCODE_SPACE]&&player.state==Playerstate::RUN){
 		    player.state=Playerstate::UP;
         }
-        if(!checkCollision(player,predator)&&background.heart!=0){
+        
+        if(!checkCollision(player,predator)){
           background.heart--;
-          player.resetPos();
-          predator.resetPosition();
-          player.playing=true;
+          SDL_Delay(200);
+          resetGame(player,predator,background);
           
          }
-
+        output(renderer,background,player,predator);
         
         player.update();
-        predator.update();
-        output(renderer,background,player,predator);
+        predator.update(player);
+        
         
         
        
@@ -171,8 +173,7 @@ bool checkCollision (Player &player,Predator &predator){
 void resetGame (Player &player,Predator &predator,Background &background){
     player.Y=495 ;
     player.state=Playerstate::RUN;
-    predator.resetPosition();
-    background.heart=3;
+    predator.resetPosition(player);
     player.playing=true ;
   
 }

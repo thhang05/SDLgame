@@ -2,21 +2,22 @@
 #include <cstdlib>
 #include<ctime>
 #include<random>
+#include "background.h"
 Predator :: Predator(SDL_Renderer* renderer):monsterTexture(nullptr) ,fireTexture(nullptr),MonsterX(0),MonsterY(100),FireX(0),FireY(480),framemons(0),framefire(0),monsterSpeed(1),firespeed(2),
                                              monsterWidth(83),monsterHeight(83),fireWidth(50),fireHeight(50),speedchanger(0),elapse(0)
 {
    //srand(time(NULL));
    //MonsterX = rand()%150+300;
    //FireX=rand()%120+850;
-    //std::random_device rd;
-   // std::mt19937 gen(rd());
-   // std::uniform_int_distribution<> mons_dis(300,450);
-    //std::uniform_int_distribution<> fire_dis(850,970);
-    //std::uniform_int_distribution<> mons_hei (200,350);
-   // MonsterX=mons_dis(gen);
-    //FireX=fire_dis(gen)  ; 
-   // MonsterY=mons_hei(gen);
-    resetPosition();
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> mons_dis(300,450);
+    std::uniform_int_distribution<> fire_dis(850,970);
+    std::uniform_int_distribution<> mons_hei (200,350);
+    MonsterX=mons_dis(gen);
+    FireX=fire_dis(gen)  ; 
+    MonsterY=mons_hei(gen);
+    //resetPosition();
     const char* monsterPath ="predator.png";
     const char* firePath ="fire2.png";
     monsterTexture=IMG_LoadTexture(renderer,monsterPath);
@@ -52,17 +53,17 @@ void Predator:: move(){
     MonsterX-=monsterSpeed;
     FireX-=firespeed;
 }
-void Predator:: resetPosition(){
+void Predator:: resetPosition(Player &player){
    std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> mons_dis(1100,1200);
     std::uniform_int_distribution<> fire_dis(850,970);
     std::uniform_int_distribution<> mons_hei (200,350);
-    if( MonsterX<=1){
+    if(player.playing==false|| MonsterX<=1){
         MonsterX=mons_dis(gen);
         MonsterY=mons_hei(gen);
     }
-    if( FireX<=1)
+    if(player.playing==false|| FireX<=1)
     FireX=fire_dis(gen)  ; 
    
 }
@@ -80,10 +81,10 @@ void Predator:: changeFrame(){
         elapse=0;
     
 }
-void Predator:: update(){
+void Predator:: update(Player &player){
     changeFrame();
     move();
-    resetPosition();
+    resetPosition(player);
 }
 int Predator:: getMonsterX(){
     return MonsterX;
