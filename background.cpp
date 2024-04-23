@@ -1,6 +1,6 @@
 #include "background.h"
 
-Background::Background(SDL_Renderer* renderer) : skyTexture(nullptr), groundTexture(nullptr) {
+Background::Background(SDL_Renderer* renderer) : skyTexture(nullptr), groundTexture(nullptr),heart(3){
     const char* groundPath = "ground.bmp";
     groundTexture = IMG_LoadTexture(renderer, groundPath);
 
@@ -14,6 +14,11 @@ Background::Background(SDL_Renderer* renderer) : skyTexture(nullptr), groundText
         elapse=0;
         for(int i = 0 ; i < 60; i++)
             SkyRect[i] = {10*i,0,600,260};
+    }
+    const char* bloodPath ="blood.png";
+    bloodTexture = IMG_LoadTexture(renderer,bloodPath);
+    if(!bloodTexture){
+        std::cerr<<"Lỗi tải kết cấu: " << SDL_GetError() << std::endl;
     }
 }
 void Background::update(SDL_Renderer* renderer){
@@ -51,4 +56,25 @@ void Background:: drawNewGameButton(SDL_Renderer* renderer){
     SDL_Rect desnew ={540,335,200,50};
     SDL_RenderCopy(renderer,newgameTexture,NULL,&desnew);
     SDL_RenderPresent(renderer);
+}
+void Background:: drawBlood (SDL_Renderer* renderer){
+    SDL_Rect blooddes[3];
+    blooddes[0].x=1080;
+    blooddes[0].y=20;
+    blooddes[0].w=60;
+    blooddes[0].h=60;
+
+    blooddes[1].x=1140;
+    blooddes[1].y=20;
+    blooddes[1].w=60;
+    blooddes[1].h=60;
+
+    blooddes[2].x=1200;
+    blooddes[2].y=20;
+    blooddes[2].w=60;
+    blooddes[2].h=60;
+
+    for(int i=0;i<heart;i++){
+        SDL_RenderCopy(renderer,bloodTexture,NULL,&blooddes[i]);
+    }
 }

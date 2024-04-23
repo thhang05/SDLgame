@@ -11,9 +11,10 @@ const int PLAYERWIDTH =80 ;
 const int PLAYERHEIGHT =80;
 const int MONSTERWIDTH =80;
 const int MONSTERHEIGHT =80;
-const int FIREWIDTH = 60;
-const int FIREHEIGHT =60;
+const int FIREWIDTH = 90;
+const int FIREHEIGHT =90;
 int mTicksCount = 0;
+int count=3;
 bool quit=false;
 bool restart = false;
 SDL_Event e;
@@ -24,7 +25,7 @@ SDL_Texture* newgameTexture ;
 void output(SDL_Renderer* renderer,Background &background,Player &player,Predator &predator);
 void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator);
 bool checkCollision(Player &player,Predator &predator);
-void resetGame (Player &player,Predator &predator);
+void resetGame (Player &player,Predator &predator,Background &background);
 void update();
 
 
@@ -99,25 +100,41 @@ void output(SDL_Renderer* renderer,Background &background,Player &player,Predato
     background.draw(renderer);
     player.draw(renderer);
     predator.draw(renderer);
-    if(restart)
-        background.drawNewGameButton(renderer);
+    background.drawBlood(renderer);
+    if(background.heart==0)
+        
+        {
+            background.drawNewGameButton(renderer);
+            background.heart=3;
+        }
+        
     SDL_RenderPresent(renderer);
 }
 void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator){
-     resetGame(player,predator);
-    while(!quit&&!restart){
+     resetGame(player,predator,background);
+    while(!quit&&background.heart!=0){
         Sleep(2);
         background.update(renderer);
         keys = SDL_GetKeyboardState(NULL);
 	    if (keys[SDL_SCANCODE_SPACE]&&player.state==Playerstate::RUN){
 		    player.state=Playerstate::UP;
         }
-        if(!checkCollision(player,predator)){
-          restart=true;
-        }
+        if(!checkCollision(player,predator)&&background.heart!=0){
+          background.heart--;
+          player.resetPos();
+          predator.resetPosition();
+          player.playing=true;
+          
+         }
+
+        
         player.update();
-        output(renderer,background,player,predator);
         predator.update();
+        output(renderer,background,player,predator);
+        
+        
+       
+        
          while( SDL_PollEvent( &e ) != 0 )
                 {
                     switch(e.type){
@@ -128,6 +145,7 @@ void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Pre
                 }
     }
 }
+
 bool checkCollision (Player &player,Predator &predator){
      if (
         player.X <= predator.MonsterX + MONSTERWIDTH/2+10 &&
@@ -140,8 +158,8 @@ bool checkCollision (Player &player,Predator &predator){
 
     if (
         player.X <= predator.FireX +FIREWIDTH/2 &&
-        player.X + PLAYERWIDTH/2+10 >= predator.FireX &&
-        player.Y + PLAYERHEIGHT/2+30 >= predator.FireY &&
+        player.X + PLAYERWIDTH/2 >= predator.FireX &&
+        player.Y + PLAYERHEIGHT/2 >= predator.FireY &&
         player.Y <= predator.FireY + FIREHEIGHT/2
     )
     {
@@ -150,11 +168,11 @@ bool checkCollision (Player &player,Predator &predator){
     return player.playing ;
    
 }
-void resetGame (Player &player,Predator &predator){
+void resetGame (Player &player,Predator &predator,Background &background){
     player.Y=495 ;
     player.state=Playerstate::RUN;
-    predator.resetPosition(restart);
-    restart = false;
+    predator.resetPosition();
+    background.heart=3;
     player.playing=true ;
   
 }

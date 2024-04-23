@@ -9,7 +9,7 @@ class Predator {
      void draw(SDL_Renderer* renderer);
      void move();
      void changeFrame();
-     void resetPosition(bool reset=false);
+     void resetPosition();
      void update();
      int getMonsterX();
      int getMonsterY();
@@ -21,7 +21,8 @@ class Predator {
      int MonsterY;
      int FireX;
      int FireY;
-     int frame;
+     int framemons;
+     int framefire ;
      float monsterSpeed;
      float firespeed;
      int monsterWidth;

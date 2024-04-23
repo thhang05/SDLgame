@@ -11,8 +11,8 @@ class Player {
       void update();
       void changeFrames ();
       Playerstate state;
-       SDL_Texture* playerTexture;
-      
+      SDL_Texture* playerTexture;
+      void resetPos();
        int X,Y,Width,Height;
        int frame;
        bool playing;

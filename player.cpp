@@ -52,5 +52,8 @@ void Player:: changeFrames(){
     
  
 }
+void Player::resetPos(){
+    Y=495;
+}
 
     
