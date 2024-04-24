@@ -3,6 +3,9 @@
 #include<windows.h>
 #include <iostream>
 #include<SDL2/SDL_mixer.h>
+#include<SDL2/SDL_ttf.h>
+#include<string>
+
 
 #include "background.h"
 #include "player.h"
@@ -16,75 +19,81 @@ const int MONSTERWIDTH =80;
 const int MONSTERHEIGHT =80;
 const int FIREWIDTH = 90;
 const int FIREHEIGHT =90;
+string scorePath="Your Score";
+string diem ;
+
 
 int mTicksCount = 0;
 int count=3;
+int score ;
+int elapse=0;
 
 bool quit=false;
 bool restart = false;
 
 SDL_Event e;
-
 SDL_Window* window=NULL;
-
 SDL_Renderer* renderer=NULL;
-
 const Uint8* keys;
 SDL_Texture* newgameTexture ;
-
 Mix_Chunk* jumpsound =NULL;
-//const char* jumpPath ="jump.wav";
+Mix_Music* runsound =NULL;
+TTF_Font* gfont =NULL;
+SDL_Surface* textSurface=NULL ;
+
 
 void output(SDL_Renderer* renderer,Background &background,Player &player,Predator &predator);
-
 void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator);
-
 bool checkCollision(Player &player,Predator &predator);
-
 void resetGame (Player &player,Predator &predator,Background &background);
-
 void update();
+void loadSound();
+void loadText( string path,int frame);
 
 
-
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) 
+{
     
-    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) { 
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) 
+    { 
         cerr << "Lỗi khởi tạo SDL: " << SDL_GetError() << endl;
         return 1; 
     }
 
-    if (!(IMG_Init(IMG_INIT_PNG))) {
+    if (!(IMG_Init(IMG_INIT_PNG))) 
+    {
         cerr << "Lỗi khởi tạo SDL_Image: " << SDL_GetError() << endl;
          return 1;
     }
 
     window = SDL_CreateWindow( "The adventure of elemental", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280,720,SDL_WINDOW_SHOWN);
 
-     if (!window) {
+     if (!window) 
+     {
         cerr << "Lỗi tạo cửa sổ: " << SDL_GetError() << endl;
         return 1; 
      }
 
     renderer = SDL_CreateRenderer( window,-1, SDL_RENDERER_ACCELERATED);
 
-    if (!renderer) {
+    if (!renderer) 
+    {
         cerr << "Lỗi tạo trình kết xuất: " << SDL_GetError() << endl;
         return 1; 
     }
 
     if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
-                {
-                    cerr<< "SDL_mixer không thể khởi tạo! Lỗi SDL_mixer :"<<Mix_GetError()<<endl ;
+    {
+        cerr<< "SDL_mixer không thể khởi tạo! Lỗi SDL_mixer :"<<Mix_GetError()<<endl ;
+        return 1;
+    }
+    if( TTF_Init() == -1 ) 
+                { 
+                    cerr<<"SDL_ttf không thể khởi tạo! Lỗi SDL_ttf: "<< TTF_GetError() ; 
                     return 1;
                 }
-
-    jumpsound = Mix_LoadWAV("jump.wav");
-    if(jumpsound=NULL)
-    {
-        cerr<<"Khong tai duoc hieu ung am thanh : "<<Mix_GetError()<<endl;
-
-    }
+    loadSound();
+    //loadText();
     
     
     
@@ -116,7 +125,10 @@ int main(int argc, char* argv[]) {
 
                                if(x>540&&x<740&&y>335&&y<380)
                                {
+                                  Mix_PlayMusic(runsound,-1);
+                                  //loadText();
                                   background.heart=3 ;
+                                  score=0;
                                   GameStart(renderer,background,player,predator) ;
                                   update() ;
                                }
@@ -128,10 +140,12 @@ int main(int argc, char* argv[]) {
                 }
     }   
     Mix_FreeChunk(jumpsound);
+    SDL_FreeSurface(textSurface);
     SDL_DestroyRenderer(renderer); 
     SDL_DestroyWindow(window);
     IMG_Quit();
     Mix_Quit();
+    TTF_Quit();
     SDL_Quit();
     
     return 0; 
@@ -142,10 +156,13 @@ void output(SDL_Renderer* renderer,Background &background,Player &player,Predato
     player.draw(renderer);
     predator.draw(renderer);
     background.drawBlood(renderer);
+    loadText(scorePath,0);
+    loadText(diem,1);
     if(background.heart==0)
         
         {
             background.drawNewGameButton(renderer);
+            Mix_PauseMusic();
         }    
         
     SDL_RenderPresent(renderer);
@@ -155,13 +172,22 @@ void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Pre
     resetGame(player,predator,background);
     while(!quit&&background.heart!=0)
     {
-        Sleep(2);
+        Sleep(1);
+        elapse++;
+        if(elapse==20){
+            score++;
+            elapse=0;
+        }
+        diem=to_string(score);
         background.update(renderer);
         keys = SDL_GetKeyboardState(NULL);
 	    if (keys[SDL_SCANCODE_SPACE]&&player.state==Playerstate::RUN)
         {
+            Mix_PlayChannel( -1, jumpsound, 0);
 		    player.state=Playerstate::UP;
-            Mix_PlayChannel(-1,jumpsound,0);
+    
+            
+            
         }
         
         if(!checkCollision(player,predator))
@@ -178,9 +204,7 @@ void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Pre
         
         
         
-       
-        
-         while( SDL_PollEvent( &e ) != 0 )
+       while( SDL_PollEvent( &e ) != 0 )
                 {
                     switch(e.type){
                         case SDL_QUIT :
@@ -232,5 +256,49 @@ void update(){
 
     mTicksCount = SDL_GetTicks();
 }
+void loadSound(){
+    jumpsound = Mix_LoadWAV("jump.wav");
+           
+      if(jumpsound==NULL)
+            {
+                cerr<<"Khong tai duoc hieu ung am thanh : "<<Mix_GetError()<<endl;
 
+            }
+    runsound=Mix_LoadMUS("newrun.mp3");
+    
+    if(runsound==NULL)
+    {
+           cerr<<"Khong tai duoc am nhac : "<<Mix_GetError()<<endl;
+    }
+}
+void loadText ( string path,SDL_Rect des)
+{
+     gfont=TTF_OpenFont("font.ttf",36);
+     if(gfont==NULL){
+        cerr<<"Khong the mo font : "<<TTF_GetError()<<endl;
+     }
+     SDL_Color textColor={255,255,255};
+     textSurface = TTF_RenderText_Solid(gfont, path.c_str(), textColor);
+     SDL_Texture* textTexture;
+     if(textSurface==NULL){
+        cerr<<"Khong the hien thi be mat van ban : "<<TTF_GetError();
+     }
+     else 
+     {
+       textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+      if(textTexture==NULL){
+        cerr<<"Khong the tao hoa tiet tu van ban duoc hien thi : "<<SDL_GetError();
 
+      }
+     }
+     SDL_Rect textRect[2];
+     
+     textRect[1].x = 50
+     textRect[1].y = 50;
+     textRect[1].w = textSurface->w;
+     textRect[1].h = textSurface->h;
+     
+     SDL_RenderCopy(renderer, textTexture, NULL, &textRect[frame]);
+    
+     TTF_CloseFont(gfont);
+}
