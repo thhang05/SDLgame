@@ -78,3 +78,12 @@ void Background:: drawBlood (SDL_Renderer* renderer){
         SDL_RenderCopy(renderer,bloodTexture,NULL,&blooddes[i]);
     }
 }
+void Background::drawFirstBg(SDL_Renderer* renderer){
+    const char* bgPath= "the.png";
+    firstTexture = IMG_LoadTexture(renderer,bgPath);
+    if(!firstTexture){
+        std::cerr<<"loi tai ket cau : "<<SDL_GetError()<<std::endl;
+    }
+    SDL_Rect des={0,0,1280,720};
+    SDL_RenderCopy(renderer,firstTexture,NULL,&des);
+}

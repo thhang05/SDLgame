@@ -10,6 +10,7 @@
 #include "background.h"
 #include "player.h"
 #include "predator.h"
+#include "revival.h"
 
 using namespace std;
 
@@ -42,17 +43,17 @@ TTF_Font* gfont =NULL;
 
 SDL_Surface* textSurface=NULL ;
 SDL_Surface* scoreSurface =NULL;
-SDL_Rect textdes={20,3,80,80};
+SDL_Rect textdes={20,3,95,80};
 SDL_Rect scoredes={110,25,50,50};
 
 
 
 
 
-void output(SDL_Renderer* renderer,Background &background,Player &player,Predator &predator);
-void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator);
+void output(SDL_Renderer* renderer,Background &background,Player &player,Predator &predator,Revival &revival);
+void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator,Revival &revival);
 bool checkCollision(Player &player,Predator &predator);
-void resetGame (Player &player,Predator &predator,Background &background);
+void resetGame (Player &player,Predator &predator,Background &background,Revival &revival);
 void update();
 void loadSound();
 void loadText(SDL_Surface* gsurface, string path,SDL_Rect des);
@@ -105,11 +106,12 @@ int main(int argc, char* argv[])
     
     
     Background background(renderer);  
-    background.draw(renderer);
+    background.drawFirstBg(renderer);
     background.drawStartbutton(renderer);
     SDL_RenderPresent(renderer);
     Player player(renderer);
     Predator predator(renderer);
+    Revival revival(renderer);
     int x,y;
     while(!quit)
     {
@@ -136,7 +138,7 @@ int main(int argc, char* argv[])
                                   //loadText();
                                   background.heart=3 ;
                                   score=0;
-                                  GameStart(renderer,background,player,predator) ;
+                                  GameStart(renderer,background,player,predator,revival) ;
                                   update() ;
                                }
                            
@@ -159,12 +161,13 @@ int main(int argc, char* argv[])
     
     return 0; 
 }
-void output(SDL_Renderer* renderer,Background &background,Player &player,Predator &predator){
+void output(SDL_Renderer* renderer,Background &background,Player &player,Predator &predator,Revival &revival){
     SDL_RenderClear(renderer);
     background.draw(renderer);
     player.draw(renderer);
     predator.draw(renderer);
     background.drawBlood(renderer);
+    revival.draw(renderer);
     diem=to_string(score);
     loadText(scoreSurface,diem,scoredes);
     loadText(textSurface,scorePath,textdes);
@@ -179,9 +182,10 @@ void output(SDL_Renderer* renderer,Background &background,Player &player,Predato
         
     SDL_RenderPresent(renderer);
 }
-void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator){
+void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Predator &predator,Revival &revival)
+{
     
-    resetGame(player,predator,background);
+    resetGame(player,predator,background,revival);
     while(!quit&&background.heart!=0)
     {
         Sleep(1);
@@ -202,17 +206,27 @@ void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Pre
             
         }
         
+        
         if(!checkCollision(player,predator))
         {
           background.heart--;
           SDL_Delay(200);
-          resetGame(player,predator,background);
+          resetGame(player,predator,background,revival);
           
          }
-        output(renderer,background,player,predator);
+        if(revival.collide(player,revival)){
+            if(background.heart<3){
+                background.heart++;
+            }
+            revival.resetPosition();
+            revival.iscollided=false ;
+
+        }
+        output(renderer,background,player,predator,revival);
         
         player.update();
         predator.update(player);
+        revival.update();
         
         
         
@@ -250,11 +264,13 @@ bool checkCollision (Player &player,Predator &predator){
     return player.playing ;
    
 }
-void resetGame (Player &player,Predator &predator,Background &background){
+void resetGame (Player &player,Predator &predator,Background &background,Revival &revival){
     player.Y=495 ;
     player.state=Playerstate::RUN;
     predator.resetPosition(player);
+    revival.resetPosition();
     player.playing=true ;
+
   
 }
 void update(){
@@ -276,7 +292,7 @@ void loadSound(){
                 cerr<<"Khong tai duoc hieu ung am thanh : "<<Mix_GetError()<<endl;
 
             }
-    runsound=Mix_LoadMUS("newrun.mp3");
+    runsound=Mix_LoadMUS("run.mp3");
     
     if(runsound==NULL)
     {
@@ -285,7 +301,7 @@ void loadSound(){
 }
 void loadText (SDL_Surface* gsurface,string path,SDL_Rect des)
 {
-     gfont=TTF_OpenFont("A.ttf",24);
+     gfont=TTF_OpenFont("ar.ttf",24);
      if(gfont==NULL){
         cerr<<"Khong the mo font : "<<TTF_GetError()<<endl;
      }

@@ -57,7 +57,7 @@ void Predator:: draw(SDL_Renderer* renderer){
     SDL_RenderCopy(renderer,fireTexture,&fireRect[framefire],&desFire);
 }
 void Predator:: move(){
-    // con mons va fire chuyen dong 
+   
     MonsterX-=monsterSpeed;
     FireX-=firespeed;
 }
