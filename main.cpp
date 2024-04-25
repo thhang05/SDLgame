@@ -19,7 +19,7 @@ const int MONSTERWIDTH =80;
 const int MONSTERHEIGHT =80;
 const int FIREWIDTH = 90;
 const int FIREHEIGHT =90;
-string scorePath="Your Score";
+string scorePath="Your Score : ";
 string diem ;
 
 
@@ -39,7 +39,14 @@ SDL_Texture* newgameTexture ;
 Mix_Chunk* jumpsound =NULL;
 Mix_Music* runsound =NULL;
 TTF_Font* gfont =NULL;
+
 SDL_Surface* textSurface=NULL ;
+SDL_Surface* scoreSurface =NULL;
+SDL_Rect textdes={20,3,80,80};
+SDL_Rect scoredes={110,25,50,50};
+
+
+
 
 
 void output(SDL_Renderer* renderer,Background &background,Player &player,Predator &predator);
@@ -48,7 +55,7 @@ bool checkCollision(Player &player,Predator &predator);
 void resetGame (Player &player,Predator &predator,Background &background);
 void update();
 void loadSound();
-void loadText( string path,int frame);
+void loadText(SDL_Surface* gsurface, string path,SDL_Rect des);
 
 
 int main(int argc, char* argv[]) 
@@ -93,7 +100,7 @@ int main(int argc, char* argv[])
                     return 1;
                 }
     loadSound();
-    //loadText();
+    
     
     
     
@@ -139,8 +146,10 @@ int main(int argc, char* argv[])
                     }
                 }
     }   
+    
     Mix_FreeChunk(jumpsound);
     SDL_FreeSurface(textSurface);
+    SDL_FreeSurface(scoreSurface);
     SDL_DestroyRenderer(renderer); 
     SDL_DestroyWindow(window);
     IMG_Quit();
@@ -156,8 +165,11 @@ void output(SDL_Renderer* renderer,Background &background,Player &player,Predato
     player.draw(renderer);
     predator.draw(renderer);
     background.drawBlood(renderer);
-    loadText(scorePath,0);
-    loadText(diem,1);
+    diem=to_string(score);
+    loadText(scoreSurface,diem,scoredes);
+    loadText(textSurface,scorePath,textdes);
+    
+    
     if(background.heart==0)
         
         {
@@ -178,7 +190,7 @@ void GameStart (SDL_Renderer* renderer,Background &background,Player &player,Pre
             score++;
             elapse=0;
         }
-        diem=to_string(score);
+        
         background.update(renderer);
         keys = SDL_GetKeyboardState(NULL);
 	    if (keys[SDL_SCANCODE_SPACE]&&player.state==Playerstate::RUN)
@@ -271,34 +283,29 @@ void loadSound(){
            cerr<<"Khong tai duoc am nhac : "<<Mix_GetError()<<endl;
     }
 }
-void loadText ( string path,SDL_Rect des)
+void loadText (SDL_Surface* gsurface,string path,SDL_Rect des)
 {
-     gfont=TTF_OpenFont("font.ttf",36);
+     gfont=TTF_OpenFont("A.ttf",24);
      if(gfont==NULL){
         cerr<<"Khong the mo font : "<<TTF_GetError()<<endl;
      }
      SDL_Color textColor={255,255,255};
-     textSurface = TTF_RenderText_Solid(gfont, path.c_str(), textColor);
+     gsurface = TTF_RenderText_Solid(gfont, path.c_str(), textColor);
      SDL_Texture* textTexture;
-     if(textSurface==NULL){
+     if(gsurface==NULL){
         cerr<<"Khong the hien thi be mat van ban : "<<TTF_GetError();
      }
      else 
      {
-       textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+       textTexture = SDL_CreateTextureFromSurface(renderer, gsurface);
       if(textTexture==NULL){
         cerr<<"Khong the tao hoa tiet tu van ban duoc hien thi : "<<SDL_GetError();
 
       }
      }
-     SDL_Rect textRect[2];
+    
      
-     textRect[1].x = 50
-     textRect[1].y = 50;
-     textRect[1].w = textSurface->w;
-     textRect[1].h = textSurface->h;
-     
-     SDL_RenderCopy(renderer, textTexture, NULL, &textRect[frame]);
+     SDL_RenderCopy(renderer, textTexture, NULL, &des);
     
      TTF_CloseFont(gfont);
 }
