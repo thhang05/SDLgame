@@ -15,10 +15,12 @@ public:
     void drawNewGameButton(SDL_Renderer* renderer);
     void drawBlood(SDL_Renderer* renderer);
     void drawFirstBg(SDL_Renderer* renderer);
+    void drawexitbutton(SDL_Renderer* renderer);
 private:
     SDL_Texture* skyTexture;
     SDL_Texture* groundTexture;
     SDL_Texture* newgameTexture;
     SDL_Texture* bloodTexture;
     SDL_Texture* firstTexture ;
+    
 };

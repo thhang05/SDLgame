@@ -108,6 +108,7 @@ int main(int argc, char* argv[])
     Background background(renderer);  
     background.drawFirstBg(renderer);
     background.drawStartbutton(renderer);
+    background.drawexitbutton(renderer);
     SDL_RenderPresent(renderer);
     Player player(renderer);
     Predator predator(renderer);
@@ -140,6 +141,9 @@ int main(int argc, char* argv[])
                                   score=0;
                                   GameStart(renderer,background,player,predator,revival) ;
                                   update() ;
+                               }
+                               if(x>540&&x<740&&y>400&&y<450){
+                                quit=true;
                                }
                            
                            

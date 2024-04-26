@@ -21,8 +21,7 @@ Revival::Revival(SDL_Renderer* renderer) :bloodTexture(nullptr),velocity(1),X(0)
 }
 void Revival::draw(SDL_Renderer* renderer){
     SDL_Rect des ={X,Y,W,H};
-    //SDL_SetRenderDrawColor(renderer,255,0,0,255);
-	//SDL_RenderDrawRect(renderer,&des);
+    
     SDL_RenderCopy(renderer,bloodTexture,NULL,&des);
 }
 void Revival::move(){
