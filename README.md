@@ -1,7 +1,10 @@
 # THE ADVENTURE OF ELEMENTALS
 
 - Thử nghiệm game: []()
-
+## Introduction
+- Họ và tên : Hồ Thúy Hằng - K68J - UET
+- Mã sinh viên : 23020661
+- Bài tập lớn : The adventure of elemental (INT2215_25 - Lập trình nâng cao)
 
 
 
