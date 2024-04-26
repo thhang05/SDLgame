@@ -1,6 +1,6 @@
 # THE ADVENTURE OF ELEMENTALS
 
-- Thử nghiệm game: []()
+- Thử nghiệm game: [https://youtu.be/R6fDa-7dLIs](https://youtu.be/R6fDa-7dLIs)
 ## Introduction
 - Họ và tên : Hồ Thúy Hằng - K68J - UET
 - Mã sinh viên : 23020661
