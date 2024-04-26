@@ -36,59 +36,69 @@
 - Đầu game người chơi sẽ được chọn 2 chế độ trên menu :
   + Start : Click chuột vào nút Start để bắt đầu 
  <div style="text-align: center;">
- ![image](https://github.com/thhang05/SDLgame/blob/main/the.png)
+
+ ![image](startbutton.png)
+    
   
    
   + Exit : Click nút exit để thoát game
 ## 3. Các đối tượng trong game :
 - Khủng long xanh (dino) : Là nhân vật trung tâm của trò chơi, vượt qua các chướng ngại vật trên đường đi
   <div style="text-align: center;">
-   ![image](the.png)
+  
+     ![image](DinoSprites.png)
 
  - Con quái bay : Là một con thú đầy sự hung hăng nhằm cản trở hành trình của chú khủng long xanh
 
   <div style="text-align: center;">
-   ![mons]()
+     
+   ![mons](predator.png)
    
 - Ngọn lửa : Những ngọn lửa cháy hừng hực sẵn sàng thiêu đốt chú khủng long
   <div style="text-align: center;">
 
-  ![fire]()
+  ![fire](fire2.png)
 - Bình hồi máu: Là những liều thuốc trợ lực cho dino hồi phục lại sức mạnh để đi đến cuối
   <div style="text-align: center;">
 
-  ![blood]()
+  ![blood](blood.png)
 ## 4.Cách chơi : 
 - Người chơi phải điều khiển chú khủng long vượt qua các chướng ngại vật sao cho điểm cao nhất có thể bằng cách dùng phím space để điều khiển chú khủng long nhảy lên
   để tránh con quái và những ngọn lửa .
-  <div style="text-align: center;">
-  ![jump]()
+ 
 - Ban đầu chú khủng long sẽ có đầy máu được thể hiện bằng 3 hình trái tim bên góc phải màn hình .Khi va chạm phải cách con quái hay là ngọn lửa thì máu của chú sẽ bị hao hụt
   đi, để hồi máu người chơi phải điều khiển chú đoạt các bình hồi máu .
  <div style="text-align: center;">
-  ![heart]()
+    
+  ![heart](myheart.png)
 
 - Bên góc trái màn hình sẽ hiển thị điểm của người chơi .
 <div style="text-align: center;">
-  ![score]()
+ 
+  
 - Nếu sử dụng hết máu thì trò chơi kết thúc
 - Người chơi có thể chơi lại bằng cách click vào nút NewGame để chơi lại màn mới
 <div style="text-align: center;">
-  ![newgame]()
+ 
+   ![newgame](newgame.png)
+  
 
 
 ## 5. Về đồ họa của game 
 - Tạo ra các chuyển động của con khủng long từ hình ảnh dino sprites
 <div style="text-align: center;">
-  ![dino]()
+   
+  ![dino](DinoSprites.png)
 
 -Tạo ra các chuyển động của con quái từ hình ảnh monster sprites 
 <div style="text-align: center;">
-  ![monst]()
+   
+  ![monst](predator.png)
 
 -Tạo các hiệu ứng bập bùng của ngọn lửa từ firesprites 
 <div style="text-align: center;">
-![fire]()
+   
+![fire](fire2.png)
 
 ## 6.Về source code của game :
 - Background.cpp :Làm nhiệm vụ vẽ các hình nền lên màn hình và cuộn hình nền 
